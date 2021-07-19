@@ -7,7 +7,7 @@ global:
   # this default via its component-specific "enabled" config. If false, no components
   # will be installed by default and per-component opt-in is required, such as by
   # setting `server.enabled` to true.
-  enabled: true
+  enabled: false
 
   # The default log level to apply to all components which do not otherwise override this setting.
   # It is recommended to generally not set this below "info" unless actively debugging due to logging verbosity.
@@ -22,12 +22,12 @@ global:
   # Set the prefix used for all resources in the Helm chart. If not set,
   # the prefix will be `<helm release name>-consul`.
   # @type: string
-  name: null
+  name: "edgex-core-consul"
 
   # The domain Consul will answer DNS queries for
   # (see `-domain` (https://consul.io/docs/agent/options#_domain)) and the domain services synced from
   # Consul into Kubernetes will have, e.g. `service-name.service.consul`.
-  domain: consul
+  domain: "edgex-core-consul"
 
   # The name (and tag) of the Consul Docker image for clients and servers.
   # This can be overridden per component. This should be pinned to a specific
@@ -307,17 +307,17 @@ server:
   # within Kubernetes to join that cluster, this should probably be false.
   # @default: global.enabled
   # @type: boolean
-  enabled: "-"
+  enabled: true
 
   # The name of the Docker image (including any tag) for the containers running
   # Consul server agents.
   # @type: string
-  image: null
+  image: "hashicorp/consul:1.10.0"
 
   # The number of server agents to run. This determines the fault tolerance of
   # the cluster. Please see the deployment table (https://consul.io/docs/internals/consensus#deployment-table)
   # for more information.
-  replicas: 3
+  replicas: 1
 
   # The number of servers that are expected to be running.
   # It defaults to server.replicas.
@@ -327,7 +327,7 @@ server:
   # were joined into the same datacenter and each cluster ran a certain number
   # of servers.
   # @type: int
-  bootstrapExpect: null
+  bootstrapExpect: 1
 
   # [Enterprise Only] This value refers to a Kubernetes secret that you have created
   # that contains your enterprise license. It is required if you are using an
@@ -1034,7 +1034,7 @@ ui:
   # configure `ui.service`.
   # @default: global.enabled
   # @type: boolean
-  enabled: "-"
+  enabled: true
 
   # Configure the service for the Consul UI.
   service:
@@ -1045,7 +1045,7 @@ ui:
 
     # The service type to register.
     # @type: string
-    type: null
+    type: NodePort
 
     # Optionally set the nodePort value of the ui service if using a NodePort service.
     # If not set and using a NodePort service, Kubernetes will automatically assign
